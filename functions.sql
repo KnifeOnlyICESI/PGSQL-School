@@ -70,7 +70,7 @@ LANGUAGE PLPGSQL;
 CREATE FUNCTION update_average() RETURNS TRIGGER
 AS
 $BODY$
-DECLARE
+DECLARE 
 	d_grade_id INTEGER;
 	old_score_sum DECIMAL;
 	new_score_sum DECIMAL;
@@ -83,16 +83,16 @@ BEGIN
 	WHERE id = NEW.student_id;
 
 	-- Get the current sum of scores
-	SELECT SUM(value) INTO old_score_sum
+	select SUM(value) INTO old_score_sum
 	FROM score
-	WHERE student_id = NEW.student_id
-	AND course_id = NEW.course_id;
+	inner JOIN student ON (score.student_id = student.id)
+	where student.grade_id = d_grade_id;
 
 	-- Get the current number of scores
-	SELECT COUNT(value) INTO nb_score
+	select COUNT(value) INTO nb_score
 	FROM score
-	WHERE student_id = NEW.student_id
-	AND course_id = NEW.student_id;
+	inner JOIN student ON (score.student_id = student.id)
+	where student.grade_id = d_grade_id;
 
 	new_score_sum := (old_score_sum + NEW.value);
 	new_average := get_average(new_score_sum, nb_score + 1);
@@ -102,7 +102,7 @@ BEGIN
 		UPDATE average
 		SET value = new_average
 		WHERE grade_id = d_grade_id
-		AND course_id = NEW.student_id;
+		AND course_id = NEW.course_id;
 	ELSE
 		INSERT INTO average (value, grade_id, course_id) VALUES (new_average, d_grade_id, NEW.course_id);
 	END IF;
