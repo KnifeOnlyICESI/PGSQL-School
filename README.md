@@ -7,6 +7,8 @@ This database represent a school to practice some PL/PGSQL features :
 
 ## Installation
 
+The database need already exists.
+
 Executes scripts in the order :
 
 1. tables.sql
