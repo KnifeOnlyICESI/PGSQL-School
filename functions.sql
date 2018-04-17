@@ -86,13 +86,15 @@ BEGIN
 	select SUM(value) INTO old_score_sum
 	FROM score
 	inner JOIN student ON (score.student_id = student.id)
-	where student.grade_id = d_grade_id;
+	where student.grade_id = d_grade_id
+	AND score.course_id = NEW.course_id;
 
 	-- Get the current number of scores
 	select COUNT(value) INTO nb_score
 	FROM score
 	inner JOIN student ON (score.student_id = student.id)
-	where student.grade_id = d_grade_id;
+	where student.grade_id = d_grade_id
+	AND score.course_id = NEW.course_id;
 
 	new_score_sum := (old_score_sum + NEW.value);
 	new_average := get_average(new_score_sum, nb_score + 1);
