@@ -9,6 +9,14 @@ This database represent a school to practice some PL/PGSQL features :
 
 The database need already exists.
 
+### With one script :
+
+Execute this script :
+
+- global.sql
+
+### With many scripts :
+
 Executes scripts in the order :
 
 1. tables.sql
